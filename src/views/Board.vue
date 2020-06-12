@@ -6,19 +6,19 @@
           <div class="flex items-center mb-2 font-bold">
             {{ col.name }}
           </div>
-          <div class="list-reset">
-            <div class="task"
-                 v-for="(task, idx) in col.tasks"
-                 :key="idx"
-                 @click="goToTask(task.id)"
-            >
-              <span class="w-full flex-no-shrink font-bold"> {{ task.name }}</span>
-              <p
-                v-if="task.description"
-                class="w-full flex-no-shrink mt-1 text-sm">
-                {{ task.description }}
-              </p>
-            </div>
+          <div class="list-reset"   v-for="(task, idx) in col.tasks"
+               :key="idx">
+            <router-link v-if="task.id" :to="{ name: 'task', params: { id: task.id } }">
+              <div class="task"
+              >
+                <span class="w-full flex-no-shrink font-bold"> {{ task.name }}</span>
+                <p
+                  v-if="task.description"
+                  class="w-full flex-no-shrink mt-1 text-sm">
+                  {{ task.description }}
+                </p>
+              </div>
+            </router-link>
           </div>
         </div>
       </div>
@@ -42,10 +42,6 @@ export default {
     }
   },
   methods: {
-    goToTask (task) {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ name: 'task', params: { id: task.id } })
-    },
     close () {
       this.$router.push({ name: 'board' })
     }
