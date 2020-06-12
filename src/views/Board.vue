@@ -7,7 +7,11 @@
             {{ col.name }}
           </div>
           <div class="list-reset">
-            <div class="task" v-for="(task, idx) in col.tasks" :key="idx">
+            <div class="task"
+                 v-for="(task, idx) in col.tasks"
+                 :key="idx"
+                 @click="goToTask(task.id)"
+            >
               <span class="w-full flex-no-shrink font-bold"> {{ task.name }}</span>
               <p
                 v-if="task.description"
@@ -18,6 +22,12 @@
           </div>
         </div>
       </div>
+      <div class="task-bg"
+            v-if="isModalOpen"
+            @click.self="close"
+        >
+        <router-view></router-view>
+      </div>
   </div>
 </template>
 
@@ -25,7 +35,20 @@
 import { mapState } from 'vuex'
 export default {
   computed: {
-    ...mapState(['board'])
+    ...mapState(['board']),
+    isModalOpen () {
+      // name that comes from router.js in a "task" router
+      return this.$route.name === 'task'
+    }
+  },
+  methods: {
+    goToTask (task) {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ name: 'task', params: { id: task.id } })
+    },
+    close () {
+      this.$router.push({ name: 'board' })
+    }
   }
 }
 </script>
