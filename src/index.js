@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 const board = JSON.parse(localStorage.getItem('board')) || defaultBoard
 
-export default new Vuex.Store({
+export const store = new Vuex.Store({
   state: {
     board
   },

@@ -20,7 +20,7 @@ export default {
         },
         {
           description: '',
-          name: 'and thrid',
+          name: 'and third',
           id: uuid(),
           userAssigned: null
         }
