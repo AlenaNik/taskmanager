@@ -20,6 +20,10 @@ body, html {
   height: 100%;
 }
 
+a {
+  text-decoration: none;
+}
+
 .container {
   @apply mx-auto;
 }

@@ -1,6 +1,5 @@
 <template>
   <div class="board">
-    {{ board }}
       <div class="flex flex-row items-start">
         <div class="column" v-for="(col, idx) in board.columns" :key="idx">
           <div class="flex items-center mb-2 font-bold">
@@ -11,23 +10,30 @@
             <router-link v-if="task.id" :to="{ name: 'task', params: { id: task.id } }">
               <div class="task"
               >
-                <span class="w-full flex-no-shrink font-bold"> {{ task.name }}</span>
+                <span class="w-full flex-no-shrink font-bold no-underline"> {{ task.name }}</span>
                 <p
                   v-if="task.description"
-                  class="w-full flex-no-shrink mt-1 text-sm">
+                  class="w-full flex-no-shrink mt-1 text-sm"
+                >
                   {{ task.description }}
                 </p>
               </div>
             </router-link>
           </div>
+          <input type="text"
+                 class="block p-2 w-full bg-transparent"
+                 placeholder="+ add new task"
+                 @keyup.enter="createTask($event, col.tasks)"
+          />
         </div>
       </div>
-      <div class="task-bg"
-            v-if="isModalOpen"
-            @click.self="close"
-        >
-        <router-view></router-view>
-      </div>
+      <transition name="fade">
+          <div class="task-bg"
+               v-if="isModalOpen"
+               @click.self="close">
+            <router-view></router-view>
+          </div>
+      </transition>
   </div>
 </template>
 
@@ -42,14 +48,31 @@ export default {
     }
   },
   methods: {
+    goToTask (task) {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ name: 'task', params: { id: task.id }})
+    },
     close () {
       this.$router.push({ name: 'board' })
+    },
+    createTask (e, tasks) {
+      this.$store.commit('CREATE_TASK', {
+        tasks,
+        name: e.target.value
+      })
+      e.target.value = ''
     }
   }
 }
 </script>
 
 <style lang="css">
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+  }
 .task {
   @apply flex items-center flex-wrap shadow mb-2 py-2 px-2 rounded bg-white text-grey-darkest no-underline;
 }
@@ -60,7 +83,7 @@ export default {
 }
 
 .board {
-  @apply p-4 bg-teal-dark h-full overflow-auto;
+  @apply p-4 bg-white h-full overflow-auto;
 }
 
 .task-bg {
