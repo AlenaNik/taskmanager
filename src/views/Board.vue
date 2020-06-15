@@ -30,7 +30,9 @@
       <transition name="fade">
           <div class="task-bg"
                v-if="isModalOpen"
-               @click.self="close">
+               @click.self="close"
+
+          >
             <router-view></router-view>
           </div>
       </transition>
