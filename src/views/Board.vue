@@ -1,12 +1,21 @@
 <template>
   <div class="board">
       <div class="flex flex-row items-start">
-        <div class="column" v-for="(col, idx) in board.columns" :key="idx">
+        <div class="column" v-for="(col, $columnIndex) in board.columns"
+             :key="$columnIndex"
+             @drop="moveTask($event, col.tasks)"
+             @dragover.prevent
+             @dragenter.prevent
+        >
           <div class="flex items-center mb-2 font-bold">
             {{ col.name }}
           </div>
-          <div class="list-reset"   v-for="(task, idx) in col.tasks"
-               :key="idx">
+          <div class="list-reset"
+               v-for="(task, $taskIndex) in col.tasks"
+               :key="$taskIndex"
+               draggable
+               @dragstart="pickUpTask($event, $taskIndex, $columnIndex)"
+          >
             <router-link v-if="task.id" :to="{ name: 'task', params: { id: task.id } }">
               <div class="task"
               >
@@ -63,9 +72,27 @@ export default {
         name: e.target.value
       })
       e.target.value = ''
+    },
+    pickUpTask (e, taskIndex, fromColumnIndex) {
+      e.dataTransfer.effectAllowed = 'move'
+      e.dataTransfer.dropEffect = 'move'
+
+      e.dataTransfer.setData('task-index', taskIndex)
+      e.dataTransfer.setData('from-column-index', fromColumnIndex)
+      //@dragstart="pickUpTask($event, $taskIndex, $columnIndex)"
+    },
+    moveTask(e, toTasks) {
+      const fromColumnIndex = e.dataTransfer.getData('from-column-index')
+      const fromTasks = this.board.columns[fromColumnIndex].tasks
+      const taskIndex = e.dataTransfer.getData('task-index')
+      this.$store.commit('MOVE_TASK', {
+        fromTasks,
+        toTasks,
+        taskIndex
+      })
     }
   }
-}
+ }
 </script>
 
 <style lang="css">
