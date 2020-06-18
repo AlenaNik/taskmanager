@@ -40,6 +40,11 @@
                  @keyup.enter="createTask($event, col.tasks)"
           />
         </div>
+        <input type="text"
+               class="block p-2 w-full bg-transparent"
+               placeholder="+ add new column"
+               @keyup.enter="createColumn($event)"
+        />
       </div>
       <transition name="fade">
           <div class="task-bg"
@@ -77,6 +82,11 @@ export default {
         name: e.target.value
       })
       e.target.value = ''
+    },
+    createColumn (e) {
+      this.$store.commit('CREATE_COLUMN', {
+        name: e.target.value
+      })
     },
     pickUpColumn (e, fromColumnIndex) {
       e.dataTransfer.effectAllowed = 'move'

@@ -1,9 +1,31 @@
 <template>
   <div id="app">
-    <router-view/>
+    <vue-custom-scrollbar class="scroll-area"  :settings="settings" @ps-scroll-y="scrollHanle">
+      <router-view />
+    </vue-custom-scrollbar>
   </div>
 </template>
 
+<script>
+import vueCustomScrollbar from 'vue-custom-scrollbar'
+export default {
+  components: {
+    vueCustomScrollbar
+  },
+  data () {
+    return {
+      settings: {
+        maxScrollbarLength: 60
+      }
+    }
+  },
+  methods: {
+    scrollHanle (evt) {
+      console.log(evt)
+    }
+  }
+}
+</script>
 <style>
 @import 'assets/styles/tailwind.postcss';
 
@@ -26,5 +48,12 @@ a {
 
 .container {
   @apply mx-auto;
+}
+
+.scroll-area {
+  position: relative;
+  width: 100%;
+  margin: auto;
+  height: 100vh;
 }
 </style>
