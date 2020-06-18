@@ -7,6 +7,11 @@
 
 <script>
 export default {
+  props: {
+    transferData: {
+      type: Object
+    }
+  },
   methods: {
     onDrag (e) {
 

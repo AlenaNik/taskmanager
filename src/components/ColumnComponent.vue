@@ -50,7 +50,7 @@ export default {
     ...mapState(['board'])
   },
   methods: {
-    moveTaskOrColumn(e, toTasks, toColumnIndex, toTaskIndex) {
+    moveTaskOrColumn (e, toTasks, toColumnIndex, toTaskIndex) {
       const type = e.dataTransfer.getData('type')
       if (type === 'task') {
         this.moveTask(e, toTasks, toTaskIndex !== undefined ? toTaskIndex : toTasks.length)

@@ -30,7 +30,7 @@ export const store = new Vuex.Store({
       tasks.push({
         name,
         id: uuid(),
-        description: randomEmoji(),
+        description: randomEmoji()
       })
     },
     DELETE_TASK (state, { tasks, id }) {
