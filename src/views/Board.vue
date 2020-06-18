@@ -3,7 +3,9 @@
       <div class="flex flex-row items-start">
         <div class="column" v-for="(col, $columnIndex) in board.columns"
              :key="$columnIndex"
-             @drop="moveTask($event, col.tasks)"
+             draggable
+             @dragstart.self="pickUpColumn($event, $columnIndex)"
+             @drop="moveTaskOrColumn($event, col.tasks, $columnIndex)"
              @dragover.prevent
              @dragenter.prevent
         >
@@ -14,7 +16,10 @@
                v-for="(task, $taskIndex) in col.tasks"
                :key="$taskIndex"
                draggable
+               @dragenter.prevent
+               @dragove.prevent
                @dragstart="pickUpTask($event, $taskIndex, $columnIndex)"
+               @drop.stop="moveTaskOrColumn($event, col.tasks, $columnIndex, $taskIndex)"
           >
             <router-link v-if="task.id" :to="{ name: 'task', params: { id: task.id } }">
               <div class="task"
@@ -73,23 +78,47 @@ export default {
       })
       e.target.value = ''
     },
+    pickUpColumn (e, fromColumnIndex) {
+      e.dataTransfer.effectAllowed = 'move'
+      e.dataTransfer.dropEffect = 'move'
+      e.dataTransfer.setData('from-column-index', fromColumnIndex)
+      e.dataTransfer.setData('type', 'column')
+    },
+    moveTaskOrColumn (e, toTasks, toColumnIndex, toTaskIndex) {
+      const type = e.dataTransfer.getData('type')
+      console.log(toTaskIndex)
+      if (type === 'task') {
+        this.moveTask(e, toTasks, toTaskIndex !== undefined ? toTaskIndex : toTasks.length)
+      } else {
+        this.moveColumn(e, toColumnIndex)
+      }
+    },
+    moveTask (e, toTasks, toTaskIndex) {
+      const fromColumnIndex = e.dataTransfer.getData('from-column-index')
+      const fromTasks = this.board.columns[fromColumnIndex].tasks
+      const fromTaskIndex = e.dataTransfer.getData('from-task-index')
+      this.$store.commit('MOVE_TASK', {
+        fromTasks,
+        fromTaskIndex,
+        toTasks,
+        toTaskIndex
+      })
+    },
+    moveColumn (e, toColumnIndex) {
+      const fromColumnIndex = e.dataTransfer.getData('from-column-index')
+      this.$store.commit('MOVE_COLUMN', {
+        fromColumnIndex,
+        toColumnIndex
+      })
+    },
     pickUpTask (e, taskIndex, fromColumnIndex) {
       e.dataTransfer.effectAllowed = 'move'
       e.dataTransfer.dropEffect = 'move'
 
       e.dataTransfer.setData('task-index', taskIndex)
       e.dataTransfer.setData('from-column-index', fromColumnIndex)
+      e.dataTransfer.setData('type', 'task')
       //@dragstart="pickUpTask($event, $taskIndex, $columnIndex)"
-    },
-    moveTask(e, toTasks) {
-      const fromColumnIndex = e.dataTransfer.getData('from-column-index')
-      const fromTasks = this.board.columns[fromColumnIndex].tasks
-      const taskIndex = e.dataTransfer.getData('task-index')
-      this.$store.commit('MOVE_TASK', {
-        fromTasks,
-        toTasks,
-        taskIndex
-      })
     }
   }
  }
