@@ -1,5 +1,5 @@
 <template>
-  <div class="board">
+  <div class="bg-indigo-900 h-full p-4 bg-white">
       <div class="flex flex-row items-start">
         <ColumnComponent
           v-for="(col, $columnIndex) in board.columns"
@@ -9,7 +9,7 @@
         />
         <input type="text"
                v-model="colName"
-               class="p-2 mr-2 flex-grow"
+               class="font-bold p-2 mr-2 flex-grow"
                placeholder="+ add new column"
                @keyup.enter="createColumn"
         />
@@ -69,13 +69,8 @@ export default {
     opacity: 0;
   }
 .task {
-  @apply flex items-center flex-wrap shadow mb-2 py-2 px-2 rounded bg-white text-grey-darkest no-underline;
+  @apply flex items-center justify-between flex-wrap shadow mb-2 py-2 px-2 rounded bg-indigo-lightest text-indigo-darkest no-underline;
 }
-
-.board {
-  @apply p-4 bg-white h-full;
-}
-
 .task-bg {
   @apply pin absolute;
   background: rgba(0,0,0,0.5);

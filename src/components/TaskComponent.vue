@@ -6,18 +6,21 @@
        @dragstart="pickUpTask($event, taskIndex, columnIndex)"
        @drop.stop="moveTaskOrColumn($event, col.tasks, columnIndex, taskIndex)"
   >
-    <router-link v-if="task.id" :to="{ name: 'task', params: { id: task.id } }">
+
       <div class="task"
       >
-        <span class="w-full flex-no-shrink font-bold no-underline"> {{ task.name }}</span>
-        <p
-          v-if="task.description"
-          class="w-full flex-no-shrink mt-1 text-sm"
-        >
-          {{ task.description }}
-        </p>
+        <router-link v-if="task.id" :to="{ name: 'task', params: { id: task.id } }">
+          <span class="w-full flex-no-shrink font-bold no-underline text-indigo">
+            {{ task.name }}</span>
+          <p
+            v-if="task.description"
+            class="w-full flex-no-shrink mt-1 text-sm text-indigo-darkest"
+          >
+            {{ task.description }}
+          </p>
+        </router-link>
+        <button class="justify-end" @click="$emit('on-delete')">🗑</button>
       </div>
-    </router-link>
   </div>
 </template>
 

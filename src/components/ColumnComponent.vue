@@ -9,7 +9,7 @@
            @dragenter.prevent
       >
         <div class="flex items-center mb-2 font-bold">
-          {{ col.name }}
+          {{ '📌 ' + col.name }}
         </div>
         <TaskComponent
           v-for="(task, $taskIndex) in col.tasks"
@@ -18,10 +18,11 @@
           :task="task"
           :taskIndex="$taskIndex"
           :columnIndex="columnIndex"
+          @on-delete="deleteTask(col.tasks, task.id)"
         />
         <input type="text"
-               class="block p-2 w-full bg-transparent"
-               placeholder="+ add new task"
+               class="font-bold block p-2 w-full bg-transparent"
+               placeholder=" 📝 add new task"
                @keyup.enter="createTask($event, col.tasks)"
         />
       </div>
@@ -49,7 +50,7 @@ export default {
     ...mapState(['board'])
   },
   methods: {
-    moveTaskOrColumn (e, toTasks, toColumnIndex, toTaskIndex) {
+    moveTaskOrColumn(e, toTasks, toColumnIndex, toTaskIndex) {
       const type = e.dataTransfer.getData('type')
       console.log(toTaskIndex)
       if (type === 'task') {
@@ -88,6 +89,16 @@ export default {
         name: e.target.value
       })
       e.target.value = ''
+      tasks.forEach(function (task) {
+        if (task.name === 'start by adding new task') {
+          tasks.splice(task, 1)
+        }
+      })
+    },
+    deleteTask (tasks, id) {
+      this.$store.commit('DELETE_TASK', {
+        tasks, id
+      })
     }
   }
 }
@@ -95,7 +106,7 @@ export default {
 
 <style>
   .column {
-    @apply bg-grey-light p-2 mr-4 text-left shadow rounded;
+    @apply bg-indigo-lighter p-2 mr-4 text-left shadow rounded;
     min-width: 350px;
   }
 </style>

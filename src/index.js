@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import defaultBoard from './default-board'
-import { saveStatePlugin, uuid } from './utils'
+import { saveStatePlugin, uuid, randomEmoji } from './utils'
 
 Vue.use(Vuex)
 
@@ -30,8 +30,11 @@ export const store = new Vuex.Store({
       tasks.push({
         name,
         id: uuid(),
-        description: ''
+        description: randomEmoji(),
       })
+    },
+    DELETE_TASK (state, { tasks, id }) {
+      tasks = tasks.filter(t => t !== id)
     },
     CREATE_COLUMN (state, { name }) {
       state.board.columns.push({
