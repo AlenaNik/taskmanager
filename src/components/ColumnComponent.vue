@@ -52,7 +52,6 @@ export default {
   methods: {
     moveTaskOrColumn(e, toTasks, toColumnIndex, toTaskIndex) {
       const type = e.dataTransfer.getData('type')
-      console.log(toTaskIndex)
       if (type === 'task') {
         this.moveTask(e, toTasks, toTaskIndex !== undefined ? toTaskIndex : toTasks.length)
       } else {
@@ -108,5 +107,9 @@ export default {
   .column {
     @apply bg-indigo-lighter p-2 mr-4 text-left shadow rounded;
     min-width: 350px;
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
   }
 </style>

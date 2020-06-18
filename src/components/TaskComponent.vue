@@ -1,5 +1,5 @@
 <template>
-  <div class="list-reset"
+  <div class="list-reset drag"
        draggable
        @dragenter.prevent
        @dragove.prevent
@@ -19,7 +19,7 @@
             {{ task.description }}
           </p>
         </router-link>
-        <button class="justify-end" @click="$emit('on-delete')">🗑</button>
+        <button v-show="task.name !== 'start by adding new task'"  class="justify-end" @click="$emit('on-delete')">🗑</button>
       </div>
   </div>
 </template>
@@ -66,6 +66,11 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+.drag {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
 </style>

@@ -1,29 +1,3 @@
-# watch-us-build-trello
-
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
-
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### task manager (Trello clone) Vue.js
+ ![alt text](https://i.ibb.co/WyPkwQ5/Screenshot-2020-06-18-at-22-38-43.png)
+ ![alt text](https://i.ibb.co/BZz3K4m/Screenshot-2020-06-18-at-22-46-26.png)
