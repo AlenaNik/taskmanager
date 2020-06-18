@@ -1,7 +1,7 @@
 <template>
   <div class="board">
       <div class="flex flex-row items-start">
-        <Column
+        <ColumnComponent
           v-for="(col, $columnIndex) in board.columns"
           :key="$columnIndex"
           :col="col"
@@ -28,11 +28,11 @@
 
 <script>
 import { mapState } from 'vuex'
-import Column from '../components/Column'
+import ColumnComponent from '../components/ColumnComponent'
 
 export default {
   components: {
-    Column
+    ColumnComponent
   },
   data () {
     return {

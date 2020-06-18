@@ -11,28 +11,14 @@
         <div class="flex items-center mb-2 font-bold">
           {{ col.name }}
         </div>
-        <div class="list-reset"
-             v-for="(task, $taskIndex) in col.tasks"
-             :key="$taskIndex"
-             draggable
-             @dragenter.prevent
-             @dragove.prevent
-             @dragstart="pickUpTask($event, $taskIndex, columnIndex)"
-             @drop.stop="moveTaskOrColumn($event, col.tasks, columnIndex, $taskIndex)"
-        >
-          <router-link v-if="task.id" :to="{ name: 'task', params: { id: task.id } }">
-            <div class="task"
-            >
-              <span class="w-full flex-no-shrink font-bold no-underline"> {{ task.name }}</span>
-              <p
-                v-if="task.description"
-                class="w-full flex-no-shrink mt-1 text-sm"
-              >
-                {{ task.description }}
-              </p>
-            </div>
-          </router-link>
-        </div>
+        <TaskComponent
+          v-for="(task, $taskIndex) in col.tasks"
+          :col="col"
+          :key="$taskIndex"
+          :task="task"
+          :taskIndex="$taskIndex"
+          :columnIndex="columnIndex"
+        />
         <input type="text"
                class="block p-2 w-full bg-transparent"
                placeholder="+ add new task"
@@ -44,7 +30,11 @@
 
 <script>
 import { mapState } from 'vuex'
+import TaskComponent from './TaskComponent'
 export default {
+  components: {
+    TaskComponent
+  },
   props: {
     col: {
       type: Object,
@@ -91,15 +81,6 @@ export default {
       e.dataTransfer.dropEffect = 'move'
       e.dataTransfer.setData('from-column-index', fromColumnIndex)
       e.dataTransfer.setData('type', 'column')
-    },
-    pickUpTask (e, taskIndex, fromColumnIndex) {
-      e.dataTransfer.effectAllowed = 'move'
-      e.dataTransfer.dropEffect = 'move'
-
-      e.dataTransfer.setData('task-index', taskIndex)
-      e.dataTransfer.setData('from-column-index', fromColumnIndex)
-      e.dataTransfer.setData('type', 'task')
-      //@dragstart="pickUpTask($event, $taskIndex, $columnIndex)"
     },
     createTask (e, tasks) {
       this.$store.commit('CREATE_TASK', {
